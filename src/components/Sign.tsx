@@ -1,3 +1,4 @@
+
 import { Modal,Button,Box,TextField} from "@mui/material";
 import { useContext, useState } from "react";
 import { UserContext } from "./userContext";
@@ -17,14 +18,14 @@ const style = {
     borderRadius: '16px',
     p: 4,
   };
-const Login =({successLogin}:{successLogin:Function})=> {
+const Sign =({successSign}:{successSign:Function})=> {
     const context = useContext(UserContext);
     const nameRef=useRef<HTMLInputElement>(null)
     const passwordRef=useRef<HTMLInputElement>(null)
     const [open,setOpen]=useState(false)
     const[isUser, setUser]=useState(false);
 
-   const handleLoginSubmit=async(e: React.FormEvent)=>{
+   const handleSignSubmit=async(e: React.FormEvent)=>{
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:3000/api/user/login', {
@@ -35,14 +36,13 @@ const Login =({successLogin}:{successLogin:Function})=> {
 
       console.log(res);
       setUser(res.data.user)
-      successLogin();
+      successSign();
   
   
   if(context)
     {
         setOpen(false);
-          // if(nameRef.current?.value === context?.user.firstName&&passwordRef.current?.value===context?.user.password)
-          // {
+         
                  context?.userDispatch({ type: 'CREATE', data: { firstName: nameRef.current?.value || '',  
                             password: passwordRef.current?.value || ''} })   
     }
@@ -62,7 +62,7 @@ const Login =({successLogin}:{successLogin:Function})=> {
                 color:'white',
                 borderRadius:'10px',
                 border:'2px solid white'}}
-                 onClick={() => {setOpen(true)}}>Login</Button>
+                 onClick={() => {setOpen(true)}}>Sign</Button>
     <Modal open={open} 
            onClose={() => setOpen(false)}
            aria-labelledby="modal-modal-title" 
@@ -79,7 +79,7 @@ const Login =({successLogin}:{successLogin:Function})=> {
                 <Button variant="contained" sx={{ background:'black',
                 color:'white',
                 borderRadius:'10px',
-                border:'2px solid white',mt: 2 }} onClick={ handleLoginSubmit} >Send </Button>
+                border:'2px solid white',mt: 2 }} onClick={ handleSignSubmit} >Send </Button>
         </Box>             
     </Modal>
 
@@ -88,12 +88,4 @@ const Login =({successLogin}:{successLogin:Function})=> {
 
 
 }
- //       successLogin();
-  //       // }
-  //       // else {
-  //       //     context?.userDispatch({ type: 'REMOVE', data: {} });
-  //       //     //successLogin();
-  //       //   }
-  //   }
-
-export default Login;
+export default Sign;
