@@ -18,35 +18,37 @@ const style = {
     borderRadius: '16px',
     p: 4,
   };
+  
 const Sign =({successSign}:{successSign:Function})=> {
     const context = useContext(UserContext);
     const nameRef=useRef<HTMLInputElement>(null)
     const passwordRef=useRef<HTMLInputElement>(null)
     const [open,setOpen]=useState(false)
-    const[isUser, setUser]=useState(false);
+    const[isUser, setUser]=useState({});
 
-   const handleSignSubmit=async(e: React.FormEvent)=>{
+   const handleSubmitSign=async(e: React.FormEvent)=>{
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3000/api/user/login', {
+      const res = await axios.post('http://localhost:3000/api/user/register', {
           name: nameRef.current?.value,
           password: passwordRef.current?.value
       }
       )
 
       console.log(res);
-      setUser(res.data.user)
+      setUser(res.data.user);
       successSign();
   
   
-  if(context)
-    {
-        setOpen(false);
+  //     if(context)
+  //     {
+  //       setOpen(false);
          
-                 context?.userDispatch({ type: 'CREATE', data: { firstName: nameRef.current?.value || '',  
-                            password: passwordRef.current?.value || ''} })   
-    }
-         } catch (e) {
+  //                context?.userDispatch({ type: 'CREATE', data: { firstName: nameRef.current?.value || '',  
+  //                           password: passwordRef.current?.value || ''} })   
+  //     }
+  // } 
+    }catch (e) {
         if (axios.isAxiosError(e) && e.response?.status === 401)
           alert('מייל או סיסמא לא תקינים')
         console.log(e);
@@ -74,12 +76,14 @@ const Sign =({successSign}:{successSign:Function})=> {
               }}
             >
         <Box sx={style}>        
+        <form onSubmit={handleSubmitSign} > 
                 <TextField label='userName' inputRef={nameRef}/>
                 <TextField label='password' inputRef={passwordRef}/>
-                <Button variant="contained" sx={{ background:'black',
+                <Button type="submit" variant="contained" sx={{ background:'black',
                 color:'white',
                 borderRadius:'10px',
-                border:'2px solid white',mt: 2 }} onClick={ handleSignSubmit} >Send </Button>
+                border:'2px solid white',mt: 2 }} >Send </Button>
+          </form>   
         </Box>             
     </Modal>
 

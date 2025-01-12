@@ -4,12 +4,15 @@ import { UserContext } from "./userContext";
 import Login from "./login";
 import { useState } from "react";
 import Username_avatar from "./username_avatar";
-import Sign from "./Sign"
+// import Sign from "./Sign"
+// import Update from "./Update";
+import { Button } from "@mui/material";
    
 
 const HomePage=()=>{
 
     const initialUser:User={
+        id:'',
         firstName:'',
         lastName:'',
         mail:'',
@@ -18,37 +21,44 @@ const HomePage=()=>{
         phone:''
     }
     const[isLogin, setIsLogin]=useState(false);
-    const[isSign, setIsSign]=useState(false);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [user, userDispatch] = useReducer(userReducer, initialUser);
-
+    const [type, setType] = useState('Login');
    
 
     const handleLoginSuccess = () => {
-        setIsLogin((islog)=>!islog); 
-    };
-
-    const handleSignSuccess = () => {
-        setIsSign((issi)=>!issi); 
-    };
+        setIsLogin((prev) => {
+          if (!prev) setIsLoginOpen(false);
+          return !prev;
+        });
+      }
 
 return(<>
 <UserContext.Provider value={{ user, userDispatch }}>
-        {!isLogin?(
+        {!isLogin&&(
             <>
-             {isSign ? (
-                        <Sign successSign={handleSignSuccess} />
-                    ) : (
-                        <Login successLogin={handleLoginSuccess} />
-                    )}
-              
-               
-             </>
-         ) :(
-            <Username_avatar/>
+             <Button variant="contained"
+                color="secondary"
+                sx={{ mx: 2 }}
+                onClick={()=>{setIsLoginOpen(true); setType('Sign'); }}
+                >sign</Button>
+     
+             <Button variant="contained"
+                color="secondary"
+                sx={{ mx: 2 }}
+                onClick={()=>{setIsLoginOpen(true); setType('Login'); }}
+                >login</Button>
+            </>)
+        }    
 
-            )}
+        {isLoginOpen&& <Login successLogin={handleLoginSuccess} typeAction={type} isOpen={isLoginOpen} />}
+         
+                 
+        {isLogin && <Username_avatar/>}
+
+
     
-</UserContext.Provider>
+        </UserContext.Provider>
 
 </>)
 }

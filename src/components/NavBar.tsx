@@ -11,7 +11,7 @@ return(
         <Link to={`/person/${name}`} style={{ marginRight: "10px" }}>person</Link>
         <Link to='/empty'>Empty</Link> 
 
-    </nav>
+</nav>
     
     </>
 )
