@@ -4,8 +4,6 @@ import { UserContext } from "./userContext";
 import Login from "./login";
 import { useState } from "react";
 import Username_avatar from "./username_avatar";
-// import Sign from "./Sign"
-// import Update from "./Update";
 import { Button } from "@mui/material";
    
 
@@ -51,7 +49,7 @@ return(<>
             </>)
         }    
 
-        {isLoginOpen&& <Login successLogin={handleLoginSuccess} typeAction={type} isOpen={isLoginOpen} />}
+        {isLoginOpen&& <Login successLogin={handleLoginSuccess} typeAction={type} close={()=>setIsLoginOpen(false)} />}
          
                  
         {isLogin && <Username_avatar/>}

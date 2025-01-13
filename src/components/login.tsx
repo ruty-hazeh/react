@@ -1,5 +1,5 @@
 import { Modal, Button, Box, TextField } from "@mui/material";
-import { FormEvent, useContext, useEffect, useRef, useState } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import { UserContext } from "./userContext";
 import axios from "axios";
 
@@ -15,18 +15,12 @@ const style = {
   p: 4,
 };
 
-const Login = ({ successLogin, typeAction,isOpen }: { successLogin: Function; typeAction: string,isOpen:boolean }) => {
+const Login = ({ successLogin, typeAction ,close}: { successLogin: Function; typeAction: string ,close:Function}) => {
   const context = useContext(UserContext);
   const firstnameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-   const [userID, setUserId] = useState<string>()
-
-  useEffect(() => {
-    if (context?.user.id) {
-      console.log("User ID updated:", context.user.id);
-    }
-  }, [context?.user.id]);
-
+  const [open,setOpen]=useState(true)
+   const [userID, setUserId] = useState<string>();
   const handleSubmitLogin = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -41,38 +35,33 @@ const Login = ({ successLogin, typeAction,isOpen }: { successLogin: Function; ty
         password: passwordRef.current?.value,
       });
 
-       setUserId(res.data.id);
+       setUserId(res.data.userId);
        
 
-      console.log(res)
       context?.userDispatch({
         type: "CREATE",
         data: { 
-          id: res.data.id, 
+          id: res.data.userId, 
           firstName: firstnameRef.current?.value || '',
                 password: passwordRef.current?.value || ''}
       });
-
-      console.log("User ID after dispatch:", res.data.id);
-      
-      alert(`${typeAction} successful`);
+    
+      setOpen(false); 
       successLogin();
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        if (e.response?.status === 400 || e.response?.status === 401) {
+      
+    } catch (e:any) {
+      
+        if (e.status === 400 || e.status === 401) {
           alert(typeAction === "Sign" ? "User already exists" : "User not found");
-        }  
-      } else {
-        console.error(e);
-        alert("An unexpected error occurred.");
-      }
+      } 
+      console.error(e);
     }
   }
 
   return (
     <Modal
-      open={isOpen}
-      onClose={() => {}}
+      open={open}
+      onClose={() =>close()}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >

@@ -15,16 +15,14 @@ const style = {
     boxShadow: 24,
     p: 4,
   }
-
-
-
+  
   const Update=({ setUpdate }: { setUpdate:Function})=>{
 
 
     const firstNameRef = useRef<HTMLInputElement>(null);
     const lastNameRef = useRef<HTMLInputElement>(null);
     const addressRef = useRef<HTMLInputElement>(null);
-    const emailRef = useRef<HTMLInputElement>(null);
+    const mailRef = useRef<HTMLInputElement>(null);
     const phonRef = useRef<HTMLInputElement>(null);
 
 
@@ -32,36 +30,28 @@ const style = {
     const [open,setOpen]=useState(true)
 // const [userID, setUserId] = useState<string>();
 
-    
-const handleUpdate=async(e: React.FormEvent)=>{
+  const handleUpdate=async(e: React.FormEvent)=>{
     e.preventDefault();
-    console.log(context?.user.firstName)
-    console.log('User ID:', context?.user.id);
     if (!context?.user.firstName) {
         alert("User not logged in");
         return;
     }
     try {
-      const res = await axios.put('http://localhost:3000/api/user/', { firstName: firstNameRef.current?.value,
-                                                            lastName: lastNameRef.current?.value ,
-                                                            address: addressRef.current?.value ,
-                                                            email: emailRef.current?.value ,
-                                                            phone: phonRef.current?.value } 
-                                                            , {
-                                                                headers: {
-                                                                    "user-id": context?.user.id, 
-                                                                    "Authorization": `Bearer ${context?.user.token}`,
-                                                                  },}
+      const res = await axios.put('http://localhost:3000/api/user/',
+         { firstName: firstNameRef.current?.value,
+           lastName: lastNameRef.current?.value ,
+           address: addressRef.current?.value ,
+           email: mailRef.current?.value ,
+           phone: phonRef.current?.value } 
+           , { headers: { "user-id": context?.user.id, },}
+                 
+                  
       )
-      console.log(res);
-    //   setUserId(res.data.id);
-   
       context?.userDispatch({ type: 'UPDATE', 
                                 data:  {
-                                    id:  context.user.id,
                                     firstName: firstNameRef.current?.value || '',
                                     lastName: lastNameRef.current?.value || '',
-                                    email: emailRef.current?.value || '',
+                                    mail: mailRef.current?.value || '',
                                     address: addressRef.current?.value || '',
                                     phoneNumber: phonRef.current?.value || ''
                                 }
@@ -69,15 +59,12 @@ const handleUpdate=async(e: React.FormEvent)=>{
         setOpen(false); 
         setUpdate();
 
-          } catch (e) {
-        if (axios.isAxiosError(e) && e.response?.status === 404)
+      } catch (e:any) {
+        if (e.status === 404)
           alert('אין כזה משתמש');
         console.log(e);
   }
 }
-
-
-    
     return(<>
      <Modal open={open} onClose={() => setUpdate()}
             aria-labelledby="modal-modal-title"
@@ -87,7 +74,7 @@ const handleUpdate=async(e: React.FormEvent)=>{
                 <TextField label='firstuserName' inputRef={firstNameRef}/>
                 <TextField label='lastuserName' inputRef={lastNameRef}/>
                 <TextField label='address' inputRef={addressRef}/>
-                <TextField label='email' inputRef={emailRef}/>
+                <TextField label='email' inputRef={mailRef}/>
                 <TextField label='phone' inputRef={phonRef}/>
 
             <Button type="submit" variant="contained" sx={{ background:'black',
@@ -99,9 +86,6 @@ const handleUpdate=async(e: React.FormEvent)=>{
     </Modal>
 
 </>)
-
-
-
 }
 export default Update;
   
