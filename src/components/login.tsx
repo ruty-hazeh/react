@@ -14,13 +14,12 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
-const Login = ({ successLogin, typeAction ,close}: { successLogin: Function; typeAction: string ,close:Function}) => {
+const Login = ({ successLogin, typeAction, close }: { successLogin: Function; typeAction: string, close: Function }) => {
   const context = useContext(UserContext);
-  const firstnameRef = useRef<HTMLInputElement>(null);
+  const firstNameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  const [open,setOpen]=useState(true)
-   const [userID, setUserId] = useState<string>();
+  const [open, setOpen] = useState(true)
+  const [userID, setUserId] = useState<string>();
   const handleSubmitLogin = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -31,53 +30,42 @@ const Login = ({ successLogin, typeAction ,close}: { successLogin: Function; typ
           : "http://localhost:3000/api/user/login";
 
       const res = await axios.post(link, {
-        firstName: firstnameRef.current?.value,
+        firstName: firstNameRef.current?.value,
         password: passwordRef.current?.value,
       });
-
-       setUserId(res.data.userId);
-       
-
+      setUserId(res.data.userId);
       context?.userDispatch({
         type: "CREATE",
-        data: { 
-          id: res.data.userId, 
-          firstName: firstnameRef.current?.value || '',
-                password: passwordRef.current?.value || ''}
+        data: {
+          id: res.data.userId,
+          firstName: firstNameRef.current?.value || '',
+          password: passwordRef.current?.value || ''
+        }
       });
-    
-      setOpen(false); 
+      setOpen(false);
       successLogin();
-      
-    } catch (e:any) {
-      
-        if (e.status === 400 || e.status === 401) {
-          alert(typeAction === "Sign" ? "User already exists" : "User not found");
-      } 
+
+    } catch (e: any) {
+
+      if (e.status === 400 || e.status === 401) {
+        alert(typeAction === "Sign" ? "User already exists" : "User not found");
+      }
       console.error(e);
     }
   }
-
   return (
     <Modal
       open={open}
-      onClose={() =>close()}
+      onClose={() => close()}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
         <form onSubmit={handleSubmitLogin}>
-          <TextField label="Username" inputRef={firstnameRef} fullWidth sx={{ mb: 2 }} />
-          <TextField
-            label="Password"
-            inputRef={passwordRef}
-            type="password"
-            fullWidth
-            sx={{ mb: 2 }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
+          <TextField label="FirstName" inputRef={firstNameRef} fullWidth sx={{ mb: 2 }} />
+          <TextField label="Password" inputRef={passwordRef} type="password" fullWidth sx={{ mb: 2 }} />
+
+          <Button type="submit" variant="contained"
             sx={{
               background: "black",
               color: "white",

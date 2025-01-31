@@ -1,24 +1,29 @@
-import {  createBrowserRouter } from "react-router"
+import { createBrowserRouter } from "react-router"
 import HomePage from "./components/HomePage"
-import Empty from "./components/Empty"
-import Person from "./components/Person"
 import AppLayout from "./components/AppLayout"
+import AllRecipes from "./components/AllRecipes"
+import AddRecipe from "./components/AddRecipe"
+import Recipe from "./components/Recipe"
 
 
 
 export const myRouter = createBrowserRouter([
-{
-    path: '/',
-    element: <AppLayout />,
-    errorElement: <>main error</>,
-    children: [
-        {path: '/',element: <HomePage/>},
-        {path: 'person/:name', element: <Person />},
-        {path: '/empty',element: <Empty/>}
+    {
+        path: '/',
+        element: <AppLayout />,
+        errorElement: <>main error</>,
+        children:
+            [
+                {
+                    path: '/allRecipes', element: <AllRecipes />, children:
+                        [{
+                            path: ':id', element: <Recipe />
+                        }]
+                },
+                { path: '/addRecipe', element: <AddRecipe /> },
 
-    ]
-
-}
+            ]
+    }
 
 ])
 export default myRouter;

@@ -4,14 +4,10 @@ import { RouterProvider } from 'react-router'
 import { myRouter } from './Router'
 
 function App() {
-
   return (
     <>
-    {/* <HomePage/> */}
-    <RouterProvider router={myRouter} />
-
+      <RouterProvider router={myRouter} />
     </>
   )
 }
-
-export default App
+export default App;

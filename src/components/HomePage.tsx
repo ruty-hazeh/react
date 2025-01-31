@@ -1,63 +1,48 @@
 import { User, userReducer } from "./user";
-import  { useReducer } from "react";
+import { useReducer } from "react";
 import { UserContext } from "./userContext";
 import Login from "./login";
 import { useState } from "react";
 import Username_avatar from "./username_avatar";
-import { Button } from "@mui/material";
-   
+import { Box, Button } from "@mui/material";
 
-const HomePage=()=>{
+const HomePage = () => {
 
-    const initialUser:User={
-        id:'',
-        firstName:'',
-        lastName:'',
-        mail:'',
-        password:'',
-        address:'',
-        phone:''
+    const initialUser: User = {
+        id: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        address: '',
+        phone: ''
     }
-    const[isLogin, setIsLogin]=useState(false);
+    const [isLogin, setIsLogin] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
-    const [user, userDispatch] = useReducer(userReducer, initialUser);
     const [type, setType] = useState('Login');
-   
 
     const handleLoginSuccess = () => {
         setIsLogin((prev) => {
-          if (!prev) setIsLoginOpen(false);
-          return !prev;
+            if (!prev) setIsLoginOpen(false);
+            return !prev;
         });
-      }
+    }
+    return (<>
+        {!isLogin && (
+            <Box
+                sx={{ position: "absolute", top: 10, left: 10, display: "flex", gap: 2 }}>
+                <Button variant="contained" color="error" onClick={() => { setIsLoginOpen(true); setType('Sign'); }}>
+                    Sign
+                </Button>
 
-return(<>
-<UserContext.Provider value={{ user, userDispatch }}>
-        {!isLogin&&(
-            <>
-             <Button variant="contained"
-                color="secondary"
-                sx={{ mx: 2 }}
-                onClick={()=>{setIsLoginOpen(true); setType('Sign'); }}
-                >sign</Button>
-     
-             <Button variant="contained"
-                color="secondary"
-                sx={{ mx: 2 }}
-                onClick={()=>{setIsLoginOpen(true); setType('Login'); }}
-                >login</Button>
-            </>)
-        }    
-
-        {isLoginOpen&& <Login successLogin={handleLoginSuccess} typeAction={type} close={()=>setIsLoginOpen(false)} />}
-         
-                 
-        {isLogin && <Username_avatar/>}
-
-
-    
-        </UserContext.Provider>
-
-</>)
+                <Button variant="contained" color="error" onClick={() => { setIsLoginOpen(true); setType('Login'); }}>
+                    Login
+                </Button>
+            </Box>
+        )
+        }
+        {isLoginOpen && <Login successLogin={handleLoginSuccess} typeAction={type} close={() => setIsLoginOpen(false)} />}
+        {isLogin && <Username_avatar />}
+    </>)
 }
 export default HomePage;

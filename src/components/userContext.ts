@@ -6,6 +6,5 @@ export type UserContextType={
     user:User,
     userDispatch:React.Dispatch<any>
 };
-
 export const UserContext=createContext<UserContextType|null>(null);
     
