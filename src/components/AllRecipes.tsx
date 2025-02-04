@@ -8,12 +8,24 @@ const AllRecipes = observer(() => {
     const navigate = useNavigate();
 
     const handleNavigate = (recipe: RecipeType) => {
-        navigate(`${recipe.id}`); 
+        navigate(`${recipe.id}`);
     }
+
 
     return (
         <Grid2 container spacing={2}>
-             <Grid2 size={{ xs: 12, md: 5 }}>
+            <Grid2 size={{ xs: 12, md: 7 }}>
+                <Box sx={{
+                    padding: 2,
+                    border: '1px solid #ccc',
+                    height: '100%',
+                    boxShadow: '0px 4px 10px rgba(112, 26, 26, 0.5)',
+                }}>
+                    <Outlet />
+                </Box>
+            </Grid2>
+
+            <Grid2 size={{ xs: 12, md: 5 }}>
                 <Box sx={{ padding: 2 }}>
                     <h2>My Recipes Book</h2>
                     {RecipesStore.list.map((recipe) => (
@@ -23,19 +35,8 @@ const AllRecipes = observer(() => {
                     ))}
                 </Box>
             </Grid2>
-
-            <Grid2 size={{ xs: 12, md: 7 }}>
-                <Box sx={{
-                    padding: 2,
-                    border: '1px solid #ccc',
-                    height: '100%',
-                    boxShadow: '0px 4px 10px rgba(112, 26, 26, 0.5)',
-                }}>
-                    <Outlet /> 
-                </Box>
-            </Grid2>
         </Grid2>
     );
-});
-
+})
 export default AllRecipes;
+
